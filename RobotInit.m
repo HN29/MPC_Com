@@ -5,8 +5,13 @@ global RP
 % Init robot
 Robot(id).x=[x(id,1), x(id,2)];
 Robot(id).RP=RP(id,:);
+% status robot
+Robot(id).banchor=0;
+Robot(id).free=1;
+Robot(id).detect=0;
 % BC
 Robot(id).Va= [0 0];
 Robot(id).target = [0 0];
+
 
 end
