@@ -23,7 +23,7 @@ heightstr=get(heightobj,'string');
 height=str2num(heightstr); %heigth of area
 
 %xcenter=[4.5,4.5]; %center of swarm
-xcenter=[10, 10]; %center of swarm
+xcenter=[2, 2]; %center of swarm
 numofsubarea=fix(numofrobots/(numofrobotsubarea+1));%number of subarea (integer part)
 redundanceofrobot=mod(numofrobots,numofrobotsubarea+1);%redundance of robots
 if redundanceofrobot~=0

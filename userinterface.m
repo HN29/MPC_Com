@@ -77,7 +77,7 @@ varargout{1} = handles.output;
 % --- Executes on button press in pushbuttonscenario.
 function pushbuttonscenario_Callback(hObject, eventdata, handles)
 global x G CriticalRadius ro numofrobots enablelinks
-global  hRobots hEdges viet_ten  thres
+global  hRobots hEdges viet_ten  thres hTargets Target
 enablelinks=[];
 thres = 0.9;
 cla(handles.figure);
@@ -103,8 +103,10 @@ numofrobots=G.NodesN;
 fh=handles.figure;  % Generating the global graph
 hold on;
 grid off;
+targetInit();
 for a=1:size(x,1),   
     hRobots(a) = plot(x(a,1), x(a,2), 'ro'); %draw robots
+    hTargets(a) = plot(Target(a).x(1), Target(a).x(2), 'r.'); %draw robots
     for b=1:size(x,1),
         if G.A(a,b) == 1    % drow communication links
             hEdges{a}(b) = plot([x(a,1) x(b,1)], [x(a,2) x(b,2)], 'b-');
@@ -128,8 +130,16 @@ function Start_Callback(hObject, eventdata, handles)
 % hObject    handle to Start (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global x G CriticalRadius numofrobots enablelinks
-numofrobots
+global x G numofrobots enablelinks Robot Target
+
+disMin = inf;
+for id=1:numofrobots
+    if (disMin > norm(Robot(id).x - Target(1).x))
+        disMin = norm(Robot(id).x - Target(1).x);
+        idMin  = id;
+    end
+end
+
 while(1)
     BC(1);
 end
