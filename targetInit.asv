@@ -1,4 +1,4 @@
-function TargetInit()
+function TargetInit(id)
 % This function is used to initialize pos and draw the robot's body.
 global Target numofrobots
 
@@ -20,5 +20,5 @@ Target(13).x  = [19.8346228135871,37.6149185828548];
 Target(14).x  = [21.1878429237510,33.8507725530829];
 Target(15).x  = [26.1795783927349,34.1381347073212];
 
-Target(
+Target(id).status = "free";
 end

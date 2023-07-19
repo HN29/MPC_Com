@@ -104,6 +104,7 @@ fh=handles.figure;  % Generating the global graph
 hold on;
 grid off;
 for a=1:size(x,1),   
+    targetInit(a);
     hRobots(a) = plot(x(a,1), x(a,2), 'ro'); %draw robots
     hTargets(a) = plot(Target(a).x(1), Target(a).x(2), 'r.'); %draw robots
     for b=1:size(x,1),
@@ -113,7 +114,6 @@ for a=1:size(x,1),
         end
     end
     RobotInit(a);
-    targetInit(a);
 end
 % insert obstacles with single click, robots with double click
 set(fh,'ButtonDownFcn',@clickcallback);
@@ -132,32 +132,25 @@ function Start_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global x G numofrobots enablelinks Robot Target banchor
 
-disMin = inf;
-idMin = 1;
-banchor =[];
-for id=1:numofrobots
-    if (disMin > norm(Robot(id).x - Target(1).x))
-        disMin = norm(Robot(id).x - Target(1).x);
-        idMin  = id;
-    end
-end
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 while(1)
-    Robot(idMin).target = Target(1).x;
-    if norm(Robot(idMin).x - Target(1).x) > 0.1
-        BC(idMin);
-    else
-        Robot(idMin).banchor=1;
-        Robot(idMin).free=0;
-        Target(1).bachor = 1;
-        Target(1).free = 0;
-        banchor = [banchor;idMin];
-        break;
-    end
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    for id=1:numofrobots
+        switch Robot(id).status
+            case "banchor"
+            case "detect"
+                if norm(Robot(id).x - Robot(id).target) < 0.1
+                    Robot(id).status = "banchor";
+                    if ~ismember(id, banchor)
+                        banchor = [banchor, id];
+                    end
+                else
+                    BC(id);
+                end
+            case "free"
+                if norm(Robot(id).x - Robot(id).target) < 4
+                    Robot(id).status = "detect";
+                end
+        end
 
-while(1)
-    
+    end
 end
