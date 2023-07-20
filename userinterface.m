@@ -133,24 +133,59 @@ function Start_Callback(hObject, eventdata, handles)
 global x G numofrobots enablelinks Robot Target banchor
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+banchor = [];
 while(1)
     for id=1:numofrobots
         switch Robot(id).status
             case "banchor"
+                for id_target=1:numofrobots
+                    if norm(Robot(id).x - Target(id_target).x) < 5
+                        if Target(id_target).status == "free"
+                            Robot(id).statusBanchor = "detect";
+                            break;
+                        elseif Target(id_target).status == "banchor"
+                            Robot(id).statusBanchor = "None";
+                        end
+                    end
+                end
             case "detect"
+                if Target(Robot(id).IDtarget).status == "banchor"
+                        Robot(id).target = [0 0];
+                        Robot(id).IDtarget = 0;
+                        Robot(id).status = "free";
+                        break;
+                end
                 if norm(Robot(id).x - Robot(id).target) < 0.1
                     Robot(id).status = "banchor";
+                    Target(Robot(id).IDtarget).status = "banchor";
                     if ~ismember(id, banchor)
                         banchor = [banchor, id];
                     end
                 else
-                    BC(id);
+                    if Target(Robot(id).IDtarget).status == "free"
+                        BC(id);
+                    end
                 end
-            case "free"
-                if norm(Robot(id).x - Robot(id).target) < 4
-                    Robot(id).status = "detect";
+            case "free"             
+                for id_target=1:numofrobots
+                    if norm(Robot(id).x - Target(id_target).x) < 5
+                        if Target(id_target).status == "free"
+                            Robot(id).target = Target(id_target).x;
+                            Robot(id).IDtarget = id_target;
+                            Robot(id).status = "detect";
+                            break;
+                        end
+                    end
+                end
+                if Robot(id).status == "free"
+                    for id_banchor=1:numofrobots
+                        if Robot(id_banchor).status == "banchor" && Robot(id_banchor).statusBanchor == "detect" 
+                            
+                            Robot(id).target = Robot(id_banchor).x;
+                            BC(id);
+                        end
+                    end
                 end
         end
-
     end
 end

@@ -7,9 +7,11 @@ Robot(id).x=[x(id,1), x(id,2)];
 Robot(id).RP=RP(id,:);
 % status robot
 Robot(id).status = "free";
+Robot(id).statusBanchor = "None";
 % BC
 Robot(id).Va= [0 0];
 Robot(id).target = [0 0];
+Robot(id).IDtarget = 0;
 
 
 end

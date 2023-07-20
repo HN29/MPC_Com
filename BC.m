@@ -8,7 +8,7 @@ if norm(Robot(i).Va) > 1
     Robot(i).Va = (Robot(i).Va/norm(Robot(i).Va));
 end
 Robot(i).V = Robot(i).Va;
-Robot(i).x = Robot(i).x+Robot(i).V*0.1;
+Robot(i).x = Robot(i).x+Robot(i).V*0.2;
 set(hRobots(i), 'Xdata', Robot(i).x(1), 'Ydata', Robot(i).x(2));
 set(hRobots(i),'color','red');
 set(viet_ten(i),'position',Robot(i).x);
