@@ -9,10 +9,8 @@ Robot(id).RP=RP(id,:);
 Robot(id).status = "free";
 Robot(id).statusBanchor = "None";
 % BC
-Robot(id).Neighbor = [];
-Robot(id).Neighbor_topo = [];
+Robot(id).Neighbor= [0 0];
 Robot(id).Va= [0 0];
-Robot(id).Vc = [0 0];
 Robot(id).target = [0 0];
 Robot(id).IDtarget = 0;
 

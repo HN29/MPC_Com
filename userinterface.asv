@@ -162,9 +162,10 @@ while(1)
             dist = norm(Robot(i).x - Robot(j).x) % norm()
             if dist < 5
                 rpnoise_rician = receptionprob_rice(dist,3);
-                Robot(i).RP(j) = rpnoise_rician; 
+                G.c3RP(id,j) = rpnoise_rician; 
             end
         end
     end
+end
     pause(0);
 end

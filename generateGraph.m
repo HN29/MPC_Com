@@ -38,6 +38,7 @@ for a=1:G.NodesN,
         end
     end
 end
+
 %%%%%%%%%%%%%%%%%%%%%%%%% Communication Models %%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 G.c3TP = 0.25*G.c3RP;
 G.c3RPsp = -log(G.c3RP);
