@@ -96,45 +96,22 @@ x=createrandomscenario1(); % goi ham createrandomscenario1
 % B = fscanf(fileID,formatSpec);
 % fclose(fileID);
 % x = [A,B];
-G=generateGraph(x,CriticalRadius,ro);
+% G=generateGraph(x,CriticalRadius,ro);
 viet_ten = showid(x,1);
-numofrobots=G.NodesN;
+numofrobots=size(x,1);
 % setup for figure windowwidthstr
 fh=handles.figure;  % Generating the global graph
 hold on;
 grid off;
 for a=1:size(x,1),
     RobotInit(a);
+end
+for a=1:size(x,1),
     targetInit(a);
     hRobots(a) = plot(x(a,1), x(a,2), 'ro'); %draw robots
     hTargets(a) = plot(Target(a).x(1), Target(a).x(2), 'r.'); %draw robots
-    for b=1:size(x,1),
-        if a~=b
-            if G.A(a,b) == 1    % drow communication links
-                hEdges{a}(b) = plot([x(a,1) x(b,1)], [x(a,2) x(b,2)], 'b-');
-                Robot(a).Neighbor = [Robot(a).Neighbor, b];
-                enablelinks  = [enablelinks;[a,b]];
-            elseif G.A(a,b) == 0
-                for c=1:size(x,1)
-                    if c~=a && c~=b
-                        if G.A(a,c) == 1 && G.A(c,b) == 1
-                            G.A(a,b) == 1;
-                            hEdges{a}(b) = plot([x(a,1) x(b,1)], [x(a,2) x(b,2)], 'b-');
-                            Robot(a).Neighbor = [Robot(a).Neighbor, b];
-                            Robot(a).Neighbor_topo = [Robot(a).Neighbor_topo; b, c];
-                            enablelinks  = [enablelinks;[a,b]];
-                            break;
-                        end
-                    end
-                end
-            end
-        end
-    end
+    find_neighbor(a);
 end
-Robot(14).Neighbor_topo
-Robot(14).Neighbor_topo(1,:)
-Robot(14).Neighbor_topo(:,1)
-
 % insert obstacles with single click, robots with double click
 set(fh,'ButtonDownFcn',@clickcallback);
 
@@ -155,16 +132,10 @@ global x G numofrobots enablelinks Robot Target banchor RP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 banchor = [];
 while(1)
-    Robot(4).target = [40 40];
+    Robot(4).target = Target(4).x;
+    find_neighbor(4);
     BC(4);
-    for i=1:numofrobots
-        for j=1:numofrobots
-            dist = norm(Robot(i).x - Robot(j).x) % norm()
-            if dist < 5
-                rpnoise_rician = receptionprob_rice(dist,3);
-                Robot(i).RP(j) = rpnoise_rician; 
-            end
-        end
-    end
+%     predict(4);
+%    disp("end");
     pause(0);
 end

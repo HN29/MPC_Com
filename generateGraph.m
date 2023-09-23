@@ -27,18 +27,6 @@ G.c3RPsp = zeros(G.NodesN, G.NodesN);
          end
      end
  end
- 
-for a=1:G.NodesN,
-    for b=1:G.NodesN,
-        if (G.c3RP(a,b) > 0.6 & a~=b)
-            G.A(a,b) = 1;
-        elseif(G.c3RP(a,b) <= 0.6)
-            G.A(a,b)=0;
-            G.c3RP(a,b) = 0;
-        end
-    end
-end
-
 %%%%%%%%%%%%%%%%%%%%%%%%% Communication Models %%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 G.c3TP = 0.25*G.c3RP;
 G.c3RPsp = -log(G.c3RP);

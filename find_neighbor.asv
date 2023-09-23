@@ -1,0 +1,42 @@
+function find_neighbor(a)
+% This function is used to initialize pos and draw the robot's body
+global hEdges Robot x G
+
+for j = 1:1:numofrobots
+    if G.A(a,j) == 1
+        set(hEdges{a}(j),'visible','off');
+    end
+    if G.A(j,a) == 1
+        set(hEdges{j}(a),'visible','off');
+    end
+end
+
+for b=1:G.NodesN,
+    if (G(a,b) > 0.8 & a~=b)
+        G.A(a,b) = 1;
+    elseif(G.c3RP(a,b) <= 0.8)
+        G.A(a,b)=0;
+        G.c3RP(a,b) = 0;
+    end
+end
+for b=1:size(x,1),
+        if a~=b
+            if G.A(a,b) == 1    % drow communication links
+            hEdges{a}(b) = plot([x(a,1) x(b,1)], [x(a,2) x(b,2)], 'b-');
+            Robot(a).Neighbor = [Robot(a).Neighbor, b];
+            elseif G.A(a,b) == 0
+                for c=1:size(x,1)
+                    if c~=a && c~=b
+                        if G.A(a,c) == 1 && G.A(c,b) == 1
+                            G.A(a,b) == 1;
+                            hEdges{a}(b) = plot([x(a,1) x(b,1)], [x(a,2) x(b,2)], 'b-');
+                            Robot(a).Neighbor = [Robot(a).Neighbor, b];
+                            Robot(a).Neighbor_topo = [Robot(a).Neighbor_topo; b, c];
+                            break;
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
