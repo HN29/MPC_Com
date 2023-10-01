@@ -128,40 +128,31 @@ function Start_Callback(hObject, eventdata, handles)
 % hObject    handle to Start (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global x numofrobots Robot Target banchor RP time
+global x numofrobots Robot Target banchor RP
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 banchor = [];
 idx = 1;
-idx_refer = 0;
 while(1)
     if norm(Robot(idx).x-Robot(idx).target) <0.1
-        Robot(idx).status = "anchor_critical";
-        Robot(idx).V = [0 0];
-        idx_refer = idx;
-        idx = idx + 1;
-        if idx == 14
-            
-            break;
-        end
+        
     end
     Robot(idx).target = Target(idx).x;
     find_neighbor(idx);
-    time = 0.04;
     BC(idx);
-    if size(Robot(idx).x_sample,1) > 20
+    if size(Robot(idx).x_sample,1) > 10
         Robot(idx).x_sample(1,:) = [];
         distance_sample = norm(Robot(idx).x_sample(1)-Robot(idx).x_sample(size(Robot(idx).x_sample,1)));
-        if distance_sample < 0.1
+        if distance_sample < 0.03
             Robot(idx).help = "Help";
         else 
             Robot(idx).help = "No";
         end
     end
-    check_help = 0;
+    
     if Robot(idx).help == "Help"
         for id = 1:15
-            if id ~= idx & Robot(id).status ~= "anchor_critical"
+            if id ~= idx
                 Robot(id).status = "free";
                 for neighbor_idx = Robot(id).Neighbor
                     if ~ismember(neighbor_idx, Robot(id).Neighbor_topo(:,2))
@@ -178,7 +169,6 @@ while(1)
                         Robot(id).target = Robot(idx).x;
                     end
                     find_neighbor(id);
-                    time = 0.5;
                     BC(id);
                 end
             end
