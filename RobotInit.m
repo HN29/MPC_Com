@@ -8,6 +8,7 @@ Robot(id).x_sample=[];
 Robot(id).RP=zeros(1,numofrobots,'double');
 Robot(id).RP_estimate=[];
 Robot(id).A=zeros(1,numofrobots,'uint32');
+Robot(id).RP_min=[];
 
 % status robot
 Robot(id).help = "No";
@@ -22,6 +23,7 @@ gamma = 1;
 Robot(id).Va= [0 0];
 Robot(id).target = [0 0];
 Robot(id).IDtarget = 0;
-
+Robot(id).minimize = id;
+Robot(id).support = 0;
 
 end

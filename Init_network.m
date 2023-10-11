@@ -37,20 +37,9 @@ for a = 1:numofrobots
                 hEdges{a}(b) = plot([x(a,1) x(b,1)], [x(a,2) x(b,2)], 'b-');
                 Robot(a).Neighbor = [Robot(a).Neighbor, b];
             end
-            for c=1:numofrobots
-                if c~=a && c~=b
-                    if Robot(a).A(c) == 1 && Robot(c).A(b) == 1
-                        Robot(a).Neighbor_topo = [Robot(a).Neighbor_topo; c, b];
-                        break;
-                    end
-                end
-            end
         end
     end
 end
-% disp(Robot(4).Neighbor);
-% disp("topo");
-% disp(Robot(4).Neighbor_topo);
 RPsp = -log(RP);
 end
 

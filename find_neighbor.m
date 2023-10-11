@@ -1,6 +1,7 @@
 function find_neighbor(a)
 % This function is used to initialize pos and draw the robot's body
-global hEdges Robot x numofrobots RP
+global hEdges Robot x numofrobots RP RPsp
+minRP =999;
 for j = 1:1:numofrobots
     if Robot(a).A(j) == 1
         set(hEdges{a}(j),'visible','off');
@@ -18,19 +19,16 @@ for b=1:numofrobots
             numberofpaths = round(3 + (8-3).*rand(1,1));
             rpnoise_rician = receptionprob_rice(dist,numberofpaths);
             Robot(a).RP(b) = rpnoise_rician;
-            RP(a,b) = dist;
+            if (Robot(a).RP(b) > 0.85)
+                Robot(a).A(b) = 1;
+                RP(a,b) = dist;
+            elseif(Robot(a).RP(b) <= 0.85)
+                Robot(a).A(b)=0;
+                Robot(a).RP(b) = 0;
+                RP(a,b) = 0;
+            end
         end
     else
-        RP(a,b) = 0;
-    end
-end
-
-for b=1:numofrobots
-    if (Robot(a).RP(b) > 0.88 & a~=b)
-        Robot(a).A(b) = 1;
-    elseif(Robot(a).RP(b) <= 0.88)
-        Robot(a).A(b)=0;
-        Robot(a).RP(b) = 0;
         RP(a,b) = 0;
     end
 end
@@ -43,18 +41,8 @@ for b=1:numofrobots
             hEdges{a}(b) = plot([x(a,1) x(b,1)], [x(a,2) x(b,2)], 'b-');
             Robot(a).Neighbor = [Robot(a).Neighbor, b];
         end
-        for c=1:numofrobots
-            if c~=a && c~=b
-                if Robot(a).A(c) == 1 && Robot(c).A(b) == 1
-                    Robot(a).Neighbor_topo = [Robot(a).Neighbor_topo; c, b];
-                end
-            end
-        end
     end
 end
-% disp(Robot(4).Neighbor);
-% disp("topo");
-% disp(Robot(4).Neighbor_topo);
 RPsp = -log(RP);
 end
 
